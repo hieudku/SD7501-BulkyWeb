@@ -25,6 +25,10 @@ namespace BulkyWeb.Controllers
         [HttpPost]
         public IActionResult Create(Category obj)
         {
+            if (obj.Name==obj.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError("Name", "The Display Order cannot match with the name");
+            }
             if (ModelState.IsValid)
             {
                 _db.Categories.Add(obj);
@@ -44,5 +48,21 @@ namespace BulkyWeb.Controllers
         {
             return $"Return All Categories With NAmes: {name}";
         }
+
+        // Edit
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id==0)
+            {
+                return NotFound();
+            }
+            Category? categoryFromDb = _db.Categories.Find(id);
+
+            if (categoryFromDb==null)
+            {
+                return NotFound();
+            }
+            return View(categoryFromDb);
+        } 
     }
 }
