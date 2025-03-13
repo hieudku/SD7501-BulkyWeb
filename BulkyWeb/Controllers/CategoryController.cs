@@ -28,6 +28,7 @@ namespace BulkyWeb.Controllers
             if (obj.Name==obj.DisplayOrder.ToString())
             {
                 ModelState.AddModelError("Name", "The Display Order cannot match with the name");
+                TempData["equalError"] = "The Display Order cannot match with the name";
             }
             if (ModelState.IsValid)
             {
@@ -36,7 +37,11 @@ namespace BulkyWeb.Controllers
                 TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
-            return View();
+            if (!ModelState.IsValid)
+            {
+                TempData["error"] = "Failed to create";
+            }
+                return View();
         }
 
 
@@ -73,6 +78,7 @@ namespace BulkyWeb.Controllers
             {
                 _db.Categories.Update(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Category edited successfully";
                 return RedirectToAction("Index");
             }
             return View();
