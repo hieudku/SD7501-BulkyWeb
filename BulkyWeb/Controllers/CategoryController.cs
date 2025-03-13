@@ -81,7 +81,11 @@ namespace BulkyWeb.Controllers
                 TempData["success"] = "Category edited successfully";
                 return RedirectToAction("Index");
             }
-            return View();
+            else if (!ModelState.IsValid)
+            {
+                TempData["error"] = "Failed to edit category";
+            }
+                return View();
         }
 
         // Delete
@@ -109,6 +113,7 @@ namespace BulkyWeb.Controllers
             }
             _db.Categories.Remove(obj);
             _db.SaveChanges();
+            TempData["success"] = "Delete successful!";
             return RedirectToAction("Index");
         }
     }
