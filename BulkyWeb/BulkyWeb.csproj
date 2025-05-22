@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SD7501Bulky.DataAccess\SD7501Bulky.DataAccess.csproj" />
+    <ProjectReference Include="..\SD7501Bulky.Models\SD7501Bulky.Models.csproj" />
   </ItemGroup>
 
 </Project>

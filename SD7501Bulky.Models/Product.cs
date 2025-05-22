@@ -45,7 +45,7 @@ namespace BulkyWeb.Models
 
         //Navigation Property
         [ForeignKey("CategoryId")]
-        public Category category { get; set; }
+        public Category? category { get; set; }
 
         public string ImageUrl { get; set; }
     }

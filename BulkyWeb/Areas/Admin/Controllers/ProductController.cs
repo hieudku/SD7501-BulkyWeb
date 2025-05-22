@@ -1,26 +1,39 @@
 ﻿using BulkyWeb.Data;
 using BulkyWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using SD7501Bulky.DataAccess.Repository.IRepository;
 
 namespace BulkyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public ProductController(ApplicationDbContext db)
+        private readonly IUnitOfWork _unitOfWork;
+        public ProductController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            List<Product> objProductList = _db.Products.ToList();
+            List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem()
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
             return View(objProductList);
         }
 
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem()
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
+            ViewBag.CategoryList = CategoryList;
             return View();
         }
         [HttpPost]
@@ -29,13 +42,19 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                _db.Products.Add(obj);
-                _db.SaveChanges();
+                _unitOfWork.Product.Add(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index");
             }
             if (!ModelState.IsValid)
             {
+                // Repopulate categories on validation failure
+                ViewBag.CategoryList = _unitOfWork.Category.GetAll().Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                });
                 TempData["error"] = "Failed to create";
             }
                 return View();
@@ -60,7 +79,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Product? productFromDb = _db.Products.Find(id);
+            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
 
             if (productFromDb==null)
             {
@@ -73,8 +92,8 @@ namespace BulkyWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Products.Update(obj);
-                _db.SaveChanges();
+                _unitOfWork.Product.Update(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Product edited successfully";
                 return RedirectToAction("Index");
             }
@@ -92,7 +111,8 @@ namespace BulkyWeb.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Product? productFromDb = _db.Products.Find(id);
+            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+
 
             if (productFromDb == null)
             {
@@ -103,13 +123,13 @@ namespace BulkyWeb.Areas.Admin.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Product? obj = _db.Products.Find(id);
+            Product? obj = _unitOfWork.Product.Get(u => u.Id == id);
             if (obj==null)
             {
                 return NotFound();
             }
-            _db.Products.Remove(obj);
-            _db.SaveChanges();
+            _unitOfWork.Product.Remove(obj);
+            _unitOfWork.Save();
             TempData["success"] = "Delete successful!";
             return RedirectToAction("Index");
         }

@@ -2,7 +2,7 @@
 @model Product
 <form method="post">
     <div class="row pb-2">
-        <h2 class="text-primary">Create Category</h2>
+        <h2 class="text-primary">Create Product</h2>
         <hr/>
     </div>
     <div asp-validation-summary="All"></div>
@@ -17,12 +17,6 @@
         <label asp-for="Description" class="p-0"> </label>
         <input asp-for="Description" class="form-control" />
         <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3 row p-1">
-        <label asp-for="CategoryId" class="p-0"> </label>
-        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryList"></select>
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
 
     <div class="mb-3 row p-1">
@@ -60,7 +54,13 @@
         <input asp-for="Price100" class="form-control" />
         <span asp-validation-for="Price100" class="text-danger"></span>
     </div>
-
+    <div class="mb-3 row p-1">
+        <label asp-for="CategoryId" class="ms-2"></label>
+        <select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-control border-0 shadow">
+            <option value="" disabled selected >--Select Category</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
     <div class="mb-3 row p-1">
         <label asp-for="ImageUrl" class="p-0"> </label>
         <input asp-for="ImageUrl" class="form-control" />
@@ -73,7 +73,7 @@
     </div>
 
     <div class="col-6">
-        <a asp-controller="Category" asp-action="Index" class="btn btn-secondary border form-control">
+        <a asp-controller="Product" asp-action="Index" class="btn btn-secondary border form-control">
             Back to list
         </a>
     </div>
