@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulkyWeb.Models
+namespace SD7501Bulky.Models
 {
     public class Product
     {
@@ -45,8 +46,9 @@ namespace BulkyWeb.Models
 
         //Navigation Property
         [ForeignKey("CategoryId")]
-        public Category? category { get; set; }
-
+        [ValidateNever]
+        public Category Category { get; set; }
+        [ValidateNever]
         public string ImageUrl { get; set; }
     }
 }

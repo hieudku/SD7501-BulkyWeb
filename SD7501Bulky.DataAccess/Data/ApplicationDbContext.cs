@@ -1,5 +1,5 @@
-﻿using BulkyWeb.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SD7501Bulky.Models;
 
 namespace BulkyWeb.Data
 {

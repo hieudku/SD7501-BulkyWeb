@@ -1,6 +1,6 @@
 ﻿using BulkyWeb.Data;
-using BulkyWeb.Models;
 using SD7501Bulky.DataAccess.Repository.IRepository;
+using SD7501Bulky.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
